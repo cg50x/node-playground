@@ -4,6 +4,9 @@
 	insert(value)
 	has(value)
 	size()
+	printPreorder()
+	printInorder()
+	printPostorder()
 	remove(value)
 */
 const TreeNode = require('./TreeNode');
@@ -74,9 +77,63 @@ class BinarySearchTree {
 		return false;
 	}
 	size() {
-		return this.sizeIterativeHelper();
+		return this._sizeIterativeHelper();
 	}
-	sizeIterativeHelper() {
+	getPreorderString() {
+		return this._printPreorderRecursiveHelper(this._root);
+	}
+	getInorderString() {
+		return this._printInorderRecursiveHelper(this._root);
+	}
+	getPostorderString() {
+		return this._printPostorderRecursiveHelper(this._root);
+	}
+	_printPreorderRecursiveHelper(rootNode) {
+		if (rootNode === null) {
+			return '';
+		}
+		let result = String(rootNode.value);
+		let leftResult = this._printPreorderRecursiveHelper(rootNode.left);
+		if (leftResult.length > 0) {
+			result += ' ' + leftResult;
+		}
+		let rightResult = this._printPreorderRecursiveHelper(rootNode.right);
+		if (rightResult.length > 0) {
+			result += ' ' + rightResult;
+		}
+		return result;
+	}
+	_printInorderRecursiveHelper(rootNode) {
+		if (rootNode === null) {
+			return '';
+		}
+		let result = this._printInorderRecursiveHelper(rootNode.left);
+		if (result.length > 0) {
+			result += ' ';
+		}
+		result += String(rootNode.value);
+		let rightResult = this._printInorderRecursiveHelper(rootNode.right);
+		if (rightResult.length > 0) {
+			result += ' ' + rightResult;
+		}
+		return result;
+	}
+	_printPostorderRecursiveHelper(rootNode) {
+		if (rootNode === null) {
+			return '';
+		}
+		let result = this._printPostorderRecursiveHelper(rootNode.left);
+		let rightResult = this._printPostorderRecursiveHelper(rootNode.right);
+		if (rightResult.length > 0 && result.length > 0) {
+			result += ' ' + rightResult;
+		}
+		if (result.length > 0) {
+			result += ' '
+		}
+		result += String(rootNode.value);		
+		return result;
+	}
+	_sizeIterativeHelper() {
 		let nodeArray = [];
 		let resultSize = 0;
 		if (this._root !== null) {
@@ -97,13 +154,13 @@ class BinarySearchTree {
 		}
 		return resultSize;
 	}
-	sizeRecursiveHelper(currNode) {
+	_sizeRecursiveHelper(currNode) {
 		if (currNode === null) {
 			return 0;
 		}
 		let resultCount = 1;
-		resultCount += this.sizeRecursiveHelper(currNode.left);
-		resultCount += this.sizeRecursiveHelper(currNode.right);
+		resultCount += this._sizeRecursiveHelper(currNode.left);
+		resultCount += this._sizeRecursiveHelper(currNode.right);
 		return resultCount;
 	}
 }
